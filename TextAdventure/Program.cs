@@ -7,8 +7,21 @@ public static class Program
     public static void Main(string[] args)
     {
         Console.WriteLine("Welcome to Little Cave Adventure.");
-        Console.WriteLine("It is very dark in here.");
-        Console.WriteLine("");
+
+        var input = "look around";
+        while (GameEngine.ParseAndExecute(input))
+        {
+            input = GetInput();
+        }
+        
+        Console.WriteLine();
         Console.WriteLine("Bye!");
+    }
+
+    private static string GetInput()
+    {
+        Console.WriteLine();
+        Console.Write("--> ");
+        return Console.ReadLine()!;
     }
 }

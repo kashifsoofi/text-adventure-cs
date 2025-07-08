@@ -20,7 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="BaseLine1.txt">
+      <None Update="BaseLine.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="TestScript.txt">

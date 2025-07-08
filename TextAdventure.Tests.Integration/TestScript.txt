@@ -1,4 +1,6 @@
-go north
+go cave
+go field
+go field
 look around
-eat sandwich
+go kitchen
 quit

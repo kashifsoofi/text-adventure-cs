@@ -8,8 +8,10 @@ public static class Program
     {
         Console.WriteLine("Welcome to Little Cave Adventure.");
 
+        var gameEngine = new GameEngine();
+        
         var input = "look around";
-        while (GameEngine.ParseAndExecute(input))
+        while (gameEngine.ParseAndExecute(input))
         {
             input = GetInput();
         }

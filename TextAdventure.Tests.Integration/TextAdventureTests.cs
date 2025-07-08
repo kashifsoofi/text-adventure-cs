@@ -15,7 +15,7 @@ public class TextAdventureTests
         using var sr = new StringReader(input);
         Console.SetIn(sr);
         
-        var expected = File.ReadAllText("BaseLine1.txt");
+        var expected = File.ReadAllText("BaseLine.txt");
 
         // Act
         Program.Main([]);
@@ -28,7 +28,7 @@ public class TextAdventureTests
     private string GetNormalisedOutput(StringWriter sw, string input)
     {
         var output = sw.ToString();
-        var outputLines = output.Replace("--> ", "--> \n") .Split('\n');;
+        var outputLines = output.Replace("--> ", "--> \n") .Split('\n');
         var inputLines = input.Split("\n");
 
         var j = 0;

@@ -1,4 +1,4 @@
-﻿using Shouldly;
+﻿using AwesomeAssertions;
 
 namespace TextAdventure.Tests.Integration;
 
@@ -15,14 +15,14 @@ public class TextAdventureTests
         using var sr = new StringReader(input);
         Console.SetIn(sr);
         
-        var expected = File.ReadAllText("BaseLine.txt");
+        var expected = File.ReadAllText("BaseLine.txt").Replace("\r\n", "\n");
 
         // Act
         Program.Main([]);
         
         // Assert
-        var output = GetNormalisedOutput(sw, input);
-        output.ShouldBe(expected);
+        var output = GetNormalisedOutput(sw, input).Replace("\r\n", "\n");
+        output.Should().Be(expected);
     }
 
     private string GetNormalisedOutput(StringWriter sw, string input)

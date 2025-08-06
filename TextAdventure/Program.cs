@@ -6,24 +6,21 @@ public static class Program
 {
     public static void Main(string[] args)
     {
-        Console.WriteLine("Welcome to Little Cave Adventure.");
-
-        var gameEngine = new GameEngine();
+        var writer = new ConsoleTextWriter(Console.Out);
+        var inputOutputManager = new InputOutputManager(new ConsoleTextReader(Console.In), writer);
+        var gameState = new World(writer);
         
-        var input = "look around";
-        while (gameEngine.ParseAndExecute(input))
+        writer.WriteLine("Welcome to Little Cave Adventure.");
+
+        var command = Command.Parse("look around");
+        while (command.Verb != "quit")
         {
-            input = GetInput();
+            var output = gameState.UpdateState(command);
+            gameState.UpdateScreen(output);
+            command = inputOutputManager.GetInput();
         }
         
-        Console.WriteLine();
-        Console.WriteLine("Bye!");
-    }
-
-    private static string GetInput()
-    {
-        Console.WriteLine();
-        Console.Write("--> ");
-        return Console.ReadLine()!;
+        writer.WriteLine();
+        writer.WriteLine("Bye!");
     }
 }

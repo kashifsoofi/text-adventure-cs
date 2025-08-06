@@ -2,14 +2,9 @@ namespace TextAdventure;
 
 public class World(ITextWriter writer)
 {
-    private readonly Object[] _locations =
-    [
-        new ("an open field", "field"),
-        new ("a little cave", "cave"),
-    ];
+    private readonly Object[] _objects = Object.AllObjects;
     
-    private int NumberOfLocations => _locations.Length;
-    private int _locationOfPlayer = 0;
+    private readonly Object _player = Object.Player;
 
     public string UpdateState(Command command)
     {
@@ -29,8 +24,10 @@ public class World(ITextWriter writer)
         if (!string.IsNullOrEmpty(noun) &&
             noun.Equals("around", StringComparison.InvariantCultureIgnoreCase))
         {
-            var location = _locations[_locationOfPlayer];
-            return $"You are in {location.Description}.";
+            var output = $"You are in {_player.Location!.Description}.\n";
+            var objs = ListObjectsAtLocation(_player.Location);
+            output += "You see:\n" + string.Join("\n", objs.Select(o => o.Description));
+            return output;
         }
         
         return "I don't understand what you want to see.";
@@ -38,23 +35,54 @@ public class World(ITextWriter writer)
     
     private string ExecuteGo(string noun)
     {
-        for (var i = 0; i < NumberOfLocations; i++)
+        var (obj, output) = GetVisible("where you want to go", noun);
+        if (obj == null)
         {
-            if (!string.IsNullOrEmpty(noun) &&
-                noun.Equals(_locations[i].Tag, StringComparison.InvariantCultureIgnoreCase))
-            {
-                if (i == _locationOfPlayer)
-                {
-                    return "You can't get much closer than this.";
-                }
+            return output;
+        }
 
-                var output = "OK.\n";
-                _locationOfPlayer = i;
-                return output + ExecuteLook("around");
-            }
+        if (obj.Location == null && obj != _player.Location)
+        {
+            _player.Location = obj;
+            output = ExecuteLook("around");
+            return $"OK.\n{output}";
         }
         
-        return "I don't understand where you want to go.";
+        return "You can't get much closer than this.";
+    }
+
+    private Object? GetObject(string noun)
+    {
+        return _objects.FirstOrDefault(o => o.Tag == noun);
+    }
+
+    private (Object?, string) GetVisible(string intention, string noun)
+    {
+        var obj = GetObject(noun);
+        if (obj is null)
+        {
+            return (null, $"I don't understand {intention}.\n");
+        }
+
+        var output = "";
+        if (!(obj == _player ||
+              obj == _player.Location ||
+              obj.Location == _player ||
+              obj.Location == _player.Location ||
+              obj.Location is null ||
+              obj.Location.Location == _player ||
+              obj.Location.Location == _player.Location))
+        {
+            output = $"You don't see any {noun} here.\n";
+            obj = null;
+        }
+
+        return (obj, output);
+    }
+
+    private List<Object> ListObjectsAtLocation(Object location)
+    {
+        return Object.AllObjects.Where(x => x != _player && x.Location == location).ToList();
     }
     
     public void UpdateScreen(string text)

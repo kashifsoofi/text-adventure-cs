@@ -1,22 +1,30 @@
 Welcome to Little Cave Adventure.
 You are in an open field.
+You see:
+a silver coin
+a burly guard
 
 --> go cave
 OK.
 You are in a little cave.
+You see:
+a gold coin
 
 --> go field
 OK.
 You are in an open field.
+You see:
+a silver coin
+a burly guard
 
 --> go field
 You can't get much closer than this.
 
 --> look around
 You are in an open field.
-
---> go kitchen
-I don't understand where you want to go.
+You see:
+a silver coin
+a burly guard
 
 --> quit
 
